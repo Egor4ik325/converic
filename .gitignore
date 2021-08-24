@@ -2,8 +2,10 @@
 __pycache__
 *.pyc
 *.sqlite3
+
 node_modules
 .pnp
 .pnp.js
+build
 
 .env
