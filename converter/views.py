@@ -1,7 +1,9 @@
 import json
 
 from django.views import View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+
+from .converter import convert
 
 
 class ConvertView(View):
@@ -15,12 +17,17 @@ class ConvertView(View):
         # Get image from Django file uploads
         image = request.FILES.get('image')
 
-        # TODO: validate image format
+        # Validate request form data
+        if image is None:
+            return HttpResponse("Image file is required!", content_type="text/html; charset=utf8", status=400)
 
-        # Convert image to the specified format
-        # ...
+        # TODO: validate image format (MIME , UploadFile, extension, first bytes)
 
-        return HttpResponse("Image is recived.")
+        # Convert image form PNG to JPEG
+        storage_name = convert(image)
+
+        # Return image storage path
+        return JsonResponse({'storage_name': storage_name})
 
 
 def get_csrf(request):

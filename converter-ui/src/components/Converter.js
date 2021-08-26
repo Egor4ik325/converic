@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { API_URL } from '../constants';
+import React, { Component, Fragment } from 'react';
+import { API_URL, MEDIA_URL } from '../constants';
 
 export default class Converter extends Component {
     // Save form input states
@@ -7,7 +7,8 @@ export default class Converter extends Component {
         super(props);
 
         this.state = {
-            image: null
+            image: null, // image as a File
+            resultImageUrl: null
         }
 
         this.handleFormatInputChange = this.handleFormatInputChange.bind(this);
@@ -29,6 +30,29 @@ export default class Converter extends Component {
         })
     }
 
+    // Render selected source image
+    renderSourceImage = () => {
+        if (this.state.image) {
+            // Convert binary image data into blob url for <img>
+            return (
+                <img src={URL.createObjectURL(this.state.image)} width="200" onLoad={URL.revokeObjectURL(this.src)} />
+            );
+        } else {
+            return <p class="text-danger">Image is not selected</p>;
+        }
+    }
+
+    // Render result converted image
+    renderResultImage = () => {
+        if (this.state.resultImageUrl) {
+            return (
+                <img src={this.state.resultImageUrl} width="200" />
+            );
+        } else {
+            return <p class="text-danger">Image is not converted</p>;
+        }
+    }
+
     // Declare methods using arrow function (access this)
     handleSubmit = (submitEvent) => {
         // Prevent default submit logic on submit event!
@@ -48,6 +72,22 @@ export default class Converter extends Component {
                 if (res.ok) {
                     console.log("Success");
                 }
+                return res.json();
+            })
+            .then(data => {
+                console.log(data.storage_name);
+
+                const convertedImageUrl = MEDIA_URL + data.storage_name;
+
+                // Save storage name in state
+                this.setState({
+                    ...this.state,
+                    resultImageUrl: convertedImageUrl
+                });
+
+                // Clear form fields
+                const form = submitEvent.target;
+                form.reset();
             })
             .catch(err => {
                 console.log("Error");
@@ -57,7 +97,18 @@ export default class Converter extends Component {
     render() {
         return (
             <div className="my-3 mx-5">
-                <form onSubmit={this.handleSubmit} encType="multipart/formdata">
+
+                <div id="source-img">
+                    Source image:
+                    {this.renderSourceImage()}
+                </div>
+
+                <div id="result-img">
+                    Result image:
+                    {this.renderResultImage()}
+                </div>
+
+                <form onSubmit={this.handleSubmit}>
                     <div className="mb-2">
                         <label htmlFor="file" className="form-label">Select image to convert: </label>
                         <input type="file" className="form-control" name="image" id="file" onChange={this.handleImageInputChange}></input>

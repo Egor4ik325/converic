@@ -5,6 +5,20 @@ and what features it will have.
 
 ## Description
 
+
+> What kind of people will use this service?
+
+- People that need quickly convert one image format into another
+  without installing any specialized software. Service web cases:
+  * convert JPEG image into PNG (to add transparency support)
+  * convert ancient file (BMP) format into modern (PNG)
+  * convert vector format (SVG) to raster (PNG) (to improve OS support)
+  * convert image to GIF (to add animation support)
+  * iconize image (ICO)
+  * convert browser formats (SVG, WebP) to OS-supported formats
+  * pack multiple images into single file (PDF)
+
+
 > What do I want an **interface** to look like?
 
 - Single-page application
@@ -44,10 +58,17 @@ and what features it will have.
 > What **file formats** will server support?
 
 - Popular file formats
-  * JPEG
+  * JPEG (JFIF)
+  * GIF
   * PNG
+  * BMP (Windows)
+  * 
+
+- Browser formats
   * SVG
   * WebP
+
+- Container formats
   * PDF
   * ICNS
   * ICO

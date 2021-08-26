@@ -139,3 +139,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000'  # React development server
 ]
+
+# Filesystem path to the media storage directory
+MEDIA_ROOT = BASE_DIR / 'media/'
+
+# URL prefix for file storage access
+MEDIA_URL = 'media/'
