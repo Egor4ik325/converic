@@ -28,7 +28,7 @@ class Header extends Component {
                             <a class="nav-link link-secondary" href="#">Compress</a>
                         </li>
                         <li className="nav-item">
-                            <a class="nav-link link-secondary" href="#">History</a>
+                            <a class="nav-link link-secondary" href="#" data-page="history" onClick={this.handleClick}>History <span className="badge rounded-pill bg-primary">{this.props.conversionCount}</span></a>
                         </li>
                     </ul>
                     <div className="text-center">

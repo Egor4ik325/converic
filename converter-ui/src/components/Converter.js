@@ -82,6 +82,8 @@ export default class Convert extends Component {
             .then(res => {
                 if (res.ok) {
                     console.log("Success");
+                } else {
+                    throw new Error();
                 }
                 return res.json();
             })
@@ -90,6 +92,26 @@ export default class Convert extends Component {
 
                 // Save storage name in state
                 const convertedImageUrl = MEDIA_URL + data.storage_name;
+
+                // Add conversion to the history (local storage)
+                // History = array of objects containing: resultUrl, date and size of the conversion
+                if (localStorage.getItem('history') === null) {
+                    localStorage.setItem('history', JSON.stringify([]));
+                }
+                let history = JSON.parse(localStorage.getItem('history'));
+                const conversion = {
+                    resultImageUrl: convertedImageUrl,
+                    from: this.getSourceImageFormat(),
+                    to: this.state.targetFormat,
+                    date: new Date().toJSON(),
+                    size: this.state.image.size,
+                }
+                history.push(conversion);
+                localStorage.setItem('history', JSON.stringify(history));
+
+                // Imcrement counter
+                this.props.onConvert();
+
                 this.setState({
                     ...this.state,
                     resultImageUrl: convertedImageUrl,
