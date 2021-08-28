@@ -4,17 +4,25 @@ import logo from './logo.png';
 // Navigation header (navbar)
 // Display brand, logo, navigation and profile
 class Header extends Component {
+    handleClick = e => {
+        // Prevent navigation to the #
+        e.preventDefault();
+
+        // Switch app page
+        this.props.onClick(e.target.dataset.page);
+    }
+
     render() {
         return (
             <header className="py-3 border-bottom">
                 <div className="container d-md-flex flex-wrap justify-content-left">
-                    <a className="d-flex justify-content-center align-items-center text-decoration-none mb-3 mb-md-1 me-md-4" href="#">
-                        <img className="me-2" src={logo} width="32" height="32" />
-                        <span className="text-dark fs-4 fw-bold">Converic</span>
+                    <a className="d-flex justify-content-center align-items-center text-decoration-none mb-3 mb-md-1 me-md-4" href="#" data-page="home" onClick={this.handleClick}>
+                        <img className="me-2" src={logo} width="32" height="32" data-page="home" onClick={this.handleClick} />
+                        <span className="text-dark fs-4 fw-bold" data-page="home" onClick={this.handleClick}>Converic</span>
                     </a>
                     <ul className="nav mb-2 mb-md-0 me-md-auto d-flex justify-content-center">
                         <li className="nav-item">
-                            <a class="nav-link link-secondary" href="#">Convert</a>
+                            <a class="nav-link link-secondary" href="#" data-page="convert" onClick={this.handleClick}>Convert</a>
                         </li>
                         <li className="nav-item">
                             <a class="nav-link link-secondary" href="#">Compress</a>

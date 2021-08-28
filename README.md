@@ -62,12 +62,25 @@ and what features it will have.
   * GIF
   * PNG
   * BMP (Windows)
+  * TIFF
 
 - Browser formats
   * SVG
   * WebP
 
 - Container formats
-  * PDF
-  * ICNS
   * ICO
+  * ICNS
+  * PDF
+
+
+### How will app identify image formats?
+
+- Identify by:
+  * by image file name extenstion
+  * by image file content type (MIME/media type)
+  * by image file first bytes
+  * by **library** (JavaScript File, Django UploadFile, Pillow image)
+
+Image file format will be processed and stored as lower-cased format names:
+`png`, `jpeg`, `svg`, ...

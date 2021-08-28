@@ -1,16 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { API_URL, MEDIA_URL } from '../constants';
+import { getSupportedFormats } from '../api/Convert';
 
 // Image convertions multi-stage interface
-export default class Converter extends Component {
+export default class Convert extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            // Conversion process stage (select -> convert -> download)
-            stage: 'select',
+            // Conversion process progress/stage (select -> convert -> download)
+            progress: 'select',
             // Seleted image (as a File object)
             image: null,
+            // Supported image conversion formats
+            supportedFormats: null,
+            targetFormat: null,
             // Url of the converted image
             resultImageUrl: null
         }
@@ -18,13 +22,22 @@ export default class Converter extends Component {
         this.handleFormatInputChange = this.handleFormatInputChange.bind(this);
     }
 
+    async componentDidMount() {
+        const supportedFormats = await getSupportedFormats()
+        this.setState({
+            supportedFormats: supportedFormats
+        });
+    }
+
     handleImageInputChange = e => {
         // Save File object (Blob) from FileList
         const image = e.target.files[0];
 
-        // Save selected file in the state
+        // 1. Save selected file in the state
+        // 2. Go to the next step
         this.setState({
-            image: image
+            image: image,
+            progress: 'convert'
         });
     }
 
@@ -32,18 +45,6 @@ export default class Converter extends Component {
         this.setState({
             [e.target.name]: e.target.value
         })
-    }
-
-    // Render selected source image
-    renderSourceImage = () => {
-        if (this.state.image) {
-            // Convert binary image data into blob url for <img>
-            return (
-                <img src={URL.createObjectURL(this.state.image)} width="200" onLoad={URL.revokeObjectURL(this.src)} />
-            );
-        } else {
-            return <p class="text-danger">Image is not selected</p>;
-        }
     }
 
     // Render result converted image
@@ -57,15 +58,21 @@ export default class Converter extends Component {
         }
     }
 
-    // Declare methods using arrow function (access this)
-    handleSubmit = (submitEvent) => {
-        // Prevent default submit logic on submit event!
-        submitEvent.preventDefault();
+    handleTargetFormatInput = e => {
+        const targetFormat = e.target.value;
 
+        this.setState({
+            targetFormat: targetFormat
+        });
+    }
+
+    // Declare methods using arrow function (access this)
+    handleConvert = () => {
         // Create <form> key:value data (auto multipart/form-data header)
         const formData = new FormData();
         // Append input:file
         formData.append('image', this.state.image);
+        formData.append('target_format', this.state.targetFormat);
 
         fetch(API_URL + 'convert/', {
             method: 'POST',
@@ -81,24 +88,143 @@ export default class Converter extends Component {
             .then(data => {
                 console.log(data.storage_name);
 
-                const convertedImageUrl = MEDIA_URL + data.storage_name;
-
                 // Save storage name in state
+                const convertedImageUrl = MEDIA_URL + data.storage_name;
                 this.setState({
                     ...this.state,
-                    resultImageUrl: convertedImageUrl
+                    resultImageUrl: convertedImageUrl,
+                    progress: 'download',
                 });
-
-                // Clear form fields
-                const form = submitEvent.target;
-                form.reset();
             })
             .catch(err => {
                 console.log("Error");
             })
     }
 
+    renderSelect = () => {
+        return (
+            <div className="m-5 p-5 bg-light border rounded-3 text-center">
+                <h2 className="mb-5">1. Select image file to conver</h2>
+
+                <form className="d-none">
+                    <input id="image-input" type="file" onChange={this.handleImageInputChange}></input>
+                </form>
+
+                <button className="btn btn-primary btn-lg" onClick={() => document.querySelector('#image-input').click()}>
+                    Select
+                </button>
+
+                <div>Progress nodes (1, 2, 3): TODO</div>
+            </div>
+        );
+    }
+
+    // Render selected source image
+    renderSourceImage = () => {
+        if (this.state.image) {
+            // Convert binary image data into blob url for <img>
+            return (
+                <img src={URL.createObjectURL(this.state.image)} width="200" onLoad={URL.revokeObjectURL(this.src)} />
+            );
+        } else {
+            return <p class="text-danger">Image is not selected</p>;
+        }
+    }
+
+    getSourceImageFormat = () => {
+        const mimeType = this.state.image.type;
+        const format = mimeType.match('image/(.*)')[1];
+        return format;
+    }
+
+    capitalizeFormat(format) {
+        if (format === 'webp') {
+            return 'WebP';
+        }
+
+        return format.toUpperCase();
+    }
+
+    getTargetFormatsOptions = () => {
+        const sourceFormat = this.getSourceImageFormat().toLowerCase();
+        return this.state.supportedFormats[sourceFormat].map(format => <option value={format}>{this.capitalizeFormat(format)}</option>);
+    }
+
+    renderConvert = () => {
+        return (
+            <div className="m-5 p-5 bg-light border rounded-3 text-center">
+                <h2 className="mb-5">2. Choose image conversion format</h2>
+                {this.renderSourceImage()}
+                <small>Name: {this.state.image.name}, type/format: {this.state.image.type}, size: {this.state.image.size}</small>
+
+                {/* <form>
+                    <input type="select"></input>
+                </form> */}
+                <div className="d-flex">
+                    <form>
+                        From:
+                        <select disabled={true} name="source-format">
+                            <option>{this.capitalizeFormat(this.getSourceImageFormat())}</option>
+                        </select>
+                        To:
+                        <select name="target-format" onClick={this.handleTargetFormatInput}>
+                            {
+                                this.state.supportedFormats ? this.getTargetFormatsOptions()
+                                    : (
+                                        <option>Loading...</option>
+                                    )
+                            }
+                        </select>
+                    </form>
+                </div>
+
+                <div>Each format description: TODO</div>
+
+                <button type="button" className="btn btn-primary btn-lg" onClick={this.handleConvert}>
+                    Convert
+                </button>
+            </div>
+        );
+    }
+
+    handleResultDownload = () => {
+
+    }
+
+    renderDownload() {
+        return (
+            <div className="m-5 p-5 bg-light border rounded-3 text-center">
+                <h2 className="mb-5">3. Download converted image</h2>
+                <div>Result image:</div>
+                <div>{this.renderResultImage()}</div>
+                {/* Open form */}
+                <form method="GET" action={this.state.resultImageUrl}>
+                    <button
+                        type="submit"
+                        className="btn btn-primary btn-lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="right"
+                    >
+                        Download
+                    </button>
+                </form>
+            </div>
+        );
+    }
+
     render() {
+        if (this.state.progress === 'select') {
+            return this.renderSelect();
+        }
+
+        if (this.state.progress === 'convert') {
+            return this.renderConvert();
+        }
+
+        if (this.state.progress === 'download') {
+            return this.renderDownload();
+        }
+
         return (
             <div className="bg-light py-3 border-bottom">
                 <div className="container">
@@ -111,36 +237,6 @@ export default class Converter extends Component {
                         Result image:
                         {this.renderResultImage()}
                     </div>
-
-
-
-
-
-
-
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="mb-2">
-                            <label htmlFor="file" className="form-label">Select image to convert: </label>
-                            <input type="file" className="form-control" name="image" id="file" onChange={this.handleImageInputChange}></input>
-                        </div>
-                        <div className="mb-2">
-                            <label className="form-label" htmlFor="source-format">Select source image format: </label>
-                            <select id="source-format" className="form-select" name="source-format" onChange={this.handleFormatInputChange}>
-                                <option></option>
-                                <option>JPEG</option>
-                                <option>PNG</option>
-                            </select>
-                        </div>
-                        <div className="mb-2">
-                            <label className="form-label" htmlFor="target-format">Select target image format: </label>
-                            <select id="target-format" className="form-select" name="target-format" onChange={this.handleFormatInputChange}>
-                                <option></option>
-                                <option>JPEG</option>
-                                <option>PNG</option>
-                            </select>
-                        </div>
-                        <button type="submit" className="btn btn-primary">Convert</button>
-                    </form >
                 </div>
             </div>
         );
