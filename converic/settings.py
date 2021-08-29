@@ -142,6 +142,12 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000'  # React development server
 ]
 
+# The list of HTTP headers that are to be exposed to the browser (default: [])
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+
+# Cookies will be allowed to be included in cross-site HTTP requests (default: False)
+CORS_ALLOW_CREDENTIALS = True
+
 # Filesystem path to the media storage directory
 MEDIA_ROOT = BASE_DIR / 'media/'
 
@@ -149,3 +155,11 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 MEDIA_URL = 'media/'
 
 AUTH_USER_MODEL = 'accounts.Account'
+
+# Prevents the cookie from being sent in cross-site requests ("Lax" by default, doesn't matter)
+CSRF_COOKIE_SAMESITE = 'Lax'  # or 'None'
+SESSION_COOKIE_SAMESITE = 'Lax'  # or 'None'
+
+# Blocks client-side JavaScript from accessing the CSRF and session cookies (doesn't matter)
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True

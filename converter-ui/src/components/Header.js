@@ -33,7 +33,7 @@ class Header extends Component {
                     </ul>
                     <div className="text-center">
                         <button className="btn btn-outline-secondary me-2" type="button">Login</button>
-                        <button className="btn btn-primary" type="button">Sign-up</button>
+                        <button className="btn btn-primary" type="button" data-page="signup" onClick={this.handleClick}>Sign-up</button>
                     </div>
                 </div>
             </header>

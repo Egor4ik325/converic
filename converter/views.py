@@ -50,13 +50,9 @@ class ConvertView(View):
 
 
 def get_supported_formats(request):
-    """Return a dictionary of possible conversions between image formats."""
+    """Return a dictionary of possible conversions between image formats.
+    CSRF protection is not required on GET request."""
     if request.method == 'GET':
         return JsonResponse(data=SUPPORTED_FORMATS)
     else:
         return HttpResponse(content="Use GET method", status=400)
-
-
-def get_csrf(request):
-    """Respond with session token for CSRF Auth protection."""
-    pass

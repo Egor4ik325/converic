@@ -30,6 +30,7 @@ def serve_attachment(request, path, document_root=None, show_indexes=False):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('converter.urls')),
+    path('auth/', include('accounts.urls')),
 ]
 
 # Serve media files while development

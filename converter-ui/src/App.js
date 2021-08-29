@@ -7,6 +7,8 @@ import ImageConverter from "./components/Converter";
 import Features from "./components/Features";
 import Footer from "./components/Footer";
 import History from "./components/History";
+import SignUp from "./components/SignUp";
+import { AUTH_URL } from "./constants";
 
 class App extends Component {
     constructor(props) {
@@ -16,8 +18,47 @@ class App extends Component {
         this.state = {
             // Current SPA page (home, convert, compress, history, profile) + error page
             page: 'home',
-            conversionCount: history === null ? 0 : JSON.parse(history).length
+            conversionCount: history === null ? 0 : JSON.parse(history).length,
+            isAuth: false, // wheather current user is auth
+            csrfToken: null, // X-CSRFToken got from get_csrf/
         }
+    }
+
+    componentDidMount() {
+        // Find out wheather user have any session (authenticated)
+        this.getSession();
+    }
+
+    // Set current user session to the state
+    getSession = () => {
+        fetch(AUTH_URL + 'get_session/', {
+            credentials: 'include' // always send cookies with request
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Get session: ", data);
+
+                if (data.is_authenticated) {
+                    this.setState({ isAuth: true });
+                } else {
+                    this.setState({ isAuth: false });
+
+                    // Request CSRF token for future auth
+                    this.getCSRF();
+                }
+            })
+            .catch(err => console.error(err));
+    }
+
+    getCSRF = async () => {
+        const res = await fetch(AUTH_URL + 'get_csrf/', {
+            credentials: 'include'
+        })
+            .catch(error => { console.error(error); });
+        const csrfToken = res.headers.get('X-CSRFToken');
+        console.log("Get token for CSRD protection: ", csrfToken);
+
+        this.setState({ csrfToken: csrfToken });
     }
 
     switchPage = page => {
@@ -63,6 +104,16 @@ class App extends Component {
                     <Footer />
                 </Fragment>
             )
+        }
+
+        if (this.state.page === 'signup') {
+            return (
+                <Fragment>
+                    <Header onClick={this.switchPage} conversionCount={this.state.conversionCount} />
+                    <SignUp token={this.state.csrfToken} switchPage={this.switchPage} />
+                    <Footer />
+                </Fragment>
+            );
         }
 
         if (this.state.page === 'error') {

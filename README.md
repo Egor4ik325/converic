@@ -84,3 +84,11 @@ and what features it will have.
 
 Image file format will be processed and stored as lower-cased format names:
 `png`, `jpeg`, `svg`, ...
+
+
+### How would the accounts work in the app?
+
+- Accounts will be used to store your conversion history persistantly in the database.
+- To create account you should be able to click Sign-in and enter email and password, username is optional
+- Then to log-in you can use either email or username + your password
+- All further conversion will be automatically added to the user database
