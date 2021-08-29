@@ -19,12 +19,12 @@ class UserManagerTests(TestCase):
         self.assertFalse(user.is_superuser)
 
         # Assert username fields doesn't exists
-        self.assertFalse(hasattr(user, 'username'))
+        self.assertTrue(not user.username)
 
         # Assert create_user method doesn't work with empty arguments
         with self.assertRaises(TypeError):
             User.users.create_user()
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             User.users.create_user(email='')
         with self.assertRaises(ValueError):
             User.users.create_user(email='', password='somepassword')
@@ -41,12 +41,12 @@ class UserManagerTests(TestCase):
         self.assertTrue(admin.is_active)
         self.assertTrue(admin.is_staff)
         self.assertTrue(admin.is_superuser)
-        self.assertFalse(hasattr(admin, 'username'))
+        self.assertTrue(not admin.username)
 
         # Assert create_superuser doesn't work with invalid arguments
         with self.assertRaises(TypeError):
             User.users.create_superuser()
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             User.users.create_superuser(email='')
         with self.assertRaises(ValueError):
             User.users.create_superuser(email='', password='somepassword')

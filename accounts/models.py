@@ -24,6 +24,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         _('username'),
         max_length=150,
         unique=True,
+        null=True,
         blank=True,
         validators=[ASCIIUsernameValidator],
         error_messages={
