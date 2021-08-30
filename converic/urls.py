@@ -34,7 +34,6 @@ urlpatterns = [
 ]
 
 # Serve media files while development
-if settings.DEBUG:
-    urlpatterns += static(prefix=settings.MEDIA_URL,
-                          view=serve_attachment,
-                          document_root=settings.MEDIA_ROOT)
+urlpatterns += static(prefix=settings.MEDIA_URL,
+                      view=serve_attachment,
+                      document_root=settings.MEDIA_ROOT)
