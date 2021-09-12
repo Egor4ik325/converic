@@ -5,6 +5,17 @@ and what features it will have.
 
 ## Description
 
+### Roadmap
+
+- [x] Accounts
+- [ ] Account storage
+- [ ] UIs
+- [ ] GIF
+- [ ] Deploy
+- [ ] SVG
+- [ ] Icons
+- [ ] Compression
+
 
 ### What kind of people will use this service?
 
@@ -92,3 +103,4 @@ Image file format will be processed and stored as lower-cased format names:
 - To create account you should be able to click Sign-in and enter email and password, username is optional
 - Then to log-in you can use either email or username + your password
 - All further conversion will be automatically added to the user database
+- Anonymous conversions will be removed both from the browser and server file storage.

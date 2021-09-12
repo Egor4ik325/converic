@@ -3,10 +3,8 @@ import React, { Component, Fragment } from 'react';
 class Features extends Component {
     render() {
         return (
-            <div className="bg-light py-3">
-                <div className="container">
-                    This webapp features.
-                </div>
+            <div className="container bg-light py-3">
+                This webapp features.
             </div>
         );
     }

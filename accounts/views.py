@@ -14,7 +14,13 @@ def account_session(request):
     if not request.user.is_authenticated:
         return JsonResponse({'is_authenticated': False})
 
-    return JsonResponse({'is_authenticated': True, })
+    data = {
+        'is_authenticated': True,
+        'email': request.user.email,
+        'username': request.user.username,
+    }
+
+    return JsonResponse(data)
 
 
 def get_csrf(request):
@@ -58,6 +64,7 @@ def register(request):
     return JsonResponse({'detail': 'Successfuly created new account'})
 
 
+@require_POST
 def account_login(request):
     """Log in user into specified account."""
     # Get credentials from request body (application/json)
@@ -81,8 +88,10 @@ def account_login(request):
 
 
 @login_required
+@ensure_csrf_cookie
+@require_POST
 def account_logout(request):
-    """Log out user."""
+    """Log out user (must be sent on POST from the website with CSRF token)."""
     # Remove user from request + flush session data
     logout(request)
-    return JsonResponse({'detail': 'Successfuly loged in'})
+    return JsonResponse({'detail': 'Successfuly loged out'})

@@ -1,34 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { AUTH_URL } from '../constants';
 
-export const logout = async token => {
-    try {
-        const response = await fetch(AUTH_URL + 'logout/', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": token,
-            },
-        });
-
-        const body = await response.json();
-        return body;
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-export default class SignUp extends Component {
+export default class Login extends Component {
     state = {
-        username: null,
         email: null,
         password: null,
     }
 
-    // Register new account 
-    register = async () => {
-        const response = await fetch(AUTH_URL + 'register/', {
+    // Login into the account
+    login = async () => {
+        const response = await fetch(AUTH_URL + 'login/', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -55,13 +36,14 @@ export default class SignUp extends Component {
 
     handleFormSubmit = e => {
         e.preventDefault();
-        this.register();
+        this.login();
     }
 
     render() {
         return (
             <div className="py-3 border-top">
                 <div className="container">
+                    <h1>Login into the account</h1>
                     <form onSubmit={this.handleFormSubmit}>
                         <input
                             className="d-block" type="email" name="email" placeholder="Email" required={true}
@@ -71,11 +53,7 @@ export default class SignUp extends Component {
                             className="d-block" type="password" name="password" placeholder="Your password" required={true}
                             onChange={this.handleInputChange}
                         ></input>
-                        <input
-                            className="d-block" type="text" name="username" placeholder="Username"
-                            onChange={this.handleInputChange}
-                        ></input>
-                        <button type="submit">Sign-up</button>
+                        <button type="submit">Login</button>
                     </form>
                 </div>
             </div>

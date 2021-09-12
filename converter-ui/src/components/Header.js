@@ -1,15 +1,43 @@
 import React, { Component } from "react";
 import logo from './logo.png';
 
+import { AUTH_URL } from "../constants";
+import { logout } from "./SignUp";
+import App from "../App";
+
 // Navigation header (navbar)
 // Display brand, logo, navigation and profile
 class Header extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            session: null
+        }
+    }
+
     handleClick = e => {
         // Prevent navigation to the #
         e.preventDefault();
 
         // Switch app page
         this.props.onClick(e.target.dataset.page);
+    }
+
+    getSession = () => {
+        fetch(AUTH_URL + 'get_session/', {
+            credentials: 'include' // always send cookies with request
+        })
+            .then(res => res.json())
+            .then(data => {
+                this.setState({ session: data });
+            })
+            .catch(err => console.error(err));
+    }
+
+
+    componentDidMount() {
+        this.getSession();
     }
 
     render() {
@@ -31,10 +59,34 @@ class Header extends Component {
                             <a class="nav-link link-secondary" href="#" data-page="history" onClick={this.handleClick}>History <span className="badge rounded-pill bg-primary">{this.props.conversionCount}</span></a>
                         </li>
                     </ul>
-                    <div className="text-center">
-                        <button className="btn btn-outline-secondary me-2" type="button">Login</button>
-                        <button className="btn btn-primary" type="button" data-page="signup" onClick={this.handleClick}>Sign-up</button>
-                    </div>
+                    {
+                        !this.props.isAuth ?
+                            <div className="text-center">
+                                <button
+                                    className="btn btn-outline-success me-2" type="button"
+                                    data-page="login"
+                                    onClick={this.handleClick}
+                                >
+                                    Login
+                                </button>
+                                <button className="btn btn-info text-white" type="button" data-page="signup" onClick={this.handleClick}>Sign-up</button>
+                            </div>
+                            :
+                            <div>
+                                <button
+                                    className="btn btn-outline-secondary me-2"
+                                    onClick={() => logout(this.props.token)}
+                                >Logout</button>
+                                <span>
+                                    {
+                                        this.state.session ?
+                                            <b>{this.state.session.email}</b>
+                                            :
+                                            <span>Noname</span>
+                                    }
+                                </span>
+                            </div>
+                    }
                 </div>
             </header>
         );

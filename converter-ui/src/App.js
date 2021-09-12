@@ -8,6 +8,7 @@ import Features from "./components/Features";
 import Footer from "./components/Footer";
 import History from "./components/History";
 import SignUp from "./components/SignUp";
+import Login from "./components/Login";
 import { AUTH_URL } from "./constants";
 
 class App extends Component {
@@ -42,10 +43,10 @@ class App extends Component {
                     this.setState({ isAuth: true });
                 } else {
                     this.setState({ isAuth: false });
-
-                    // Request CSRF token for future auth
-                    this.getCSRF();
                 }
+
+                // Request CSRF token for future auth
+                this.getCSRF();
             })
             .catch(err => console.error(err));
     }
@@ -77,7 +78,7 @@ class App extends Component {
         if (this.state.page === 'home') {
             return (
                 <Fragment>
-                    <Header onClick={this.switchPage} conversionCount={this.state.conversionCount} />
+                    <Header onClick={this.switchPage} isAuth={this.state.isAuth} token={this.state.csrfToken} conversionCount={this.state.conversionCount} />
                     <Hero />
                     <ConvertHero />
                     <Features />
@@ -89,7 +90,7 @@ class App extends Component {
         if (this.state.page === 'convert') {
             return (
                 <Fragment>
-                    <Header onClick={this.switchPage} conversionCount={this.state.conversionCount} />
+                    <Header onClick={this.switchPage} isAuth={this.state.isAuth} token={this.state.csrfToken} conversionCount={this.state.conversionCount} />
                     <ImageConverter onConvert={this.onConvert} />
                     <Footer />
                 </Fragment>
@@ -99,18 +100,23 @@ class App extends Component {
         if (this.state.page === 'history') {
             return (
                 <Fragment>
-                    <Header onClick={this.switchPage} conversionCount={this.state.conversionCount} />
+                    <Header onClick={this.switchPage} isAuth={this.state.isAuth} token={this.state.csrfToken} conversionCount={this.state.conversionCount} />
                     <History />
                     <Footer />
                 </Fragment>
             )
         }
 
-        if (this.state.page === 'signup') {
+        if (this.state.page === 'signup' || this.state.page === 'login') {
             return (
                 <Fragment>
-                    <Header onClick={this.switchPage} conversionCount={this.state.conversionCount} />
-                    <SignUp token={this.state.csrfToken} switchPage={this.switchPage} />
+                    <Header onClick={this.switchPage} isAuth={this.state.isAuth} token={this.state.csrfToken} conversionCount={this.state.conversionCount} />
+                    {
+                        this.state.page === 'signup' ?
+                            <SignUp token={this.state.csrfToken} switchPage={this.switchPage} />
+                            :
+                            <Login token={this.state.csrfToken} switchPage={this.switchPage} />
+                    }
                     <Footer />
                 </Fragment>
             );
@@ -119,7 +125,7 @@ class App extends Component {
         if (this.state.page === 'error') {
             return (
                 <Fragment>
-                    <Header onClick={this.switchPage} conversionCount={this.state.conversionCount} />
+                    <Header onClick={this.switchPage} isAuth={this.state.isAuth} token={this.state.csrfToken} conversionCount={this.state.conversionCount} />
                     <ErrorHero />
                     <Footer />
                 </Fragment>
