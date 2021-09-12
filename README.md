@@ -58,8 +58,8 @@ and what features it will have.
 
 - I have chosen **cross-origin** from following options:
   1. Front-end (*static files*) served from back-end
-  2. Front-end (server) and back-end on the *same origin* (domain)
-  3. Front-end (server) and back-end are *cross-origin* 
+  2. Front-end (server) and back-end (server) on the *same origin* (domain)
+  3. Front-end (server) and back-end (server) are *cross-origin* 
 
 ### What **features** it will have?
 
