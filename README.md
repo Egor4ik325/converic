@@ -8,14 +8,36 @@ and what features it will have.
 ### Roadmap
 
 - [x] Accounts
-- [ ] Account storage
-- [ ] UIs
-- [ ] GIF
+- [x] Conversion storage
 - [ ] Deploy
+- [ ] Advanced UIs
+- [ ] GIF
 - [ ] SVG
 - [ ] Icons
 - [ ] Compression
 
+
+### Conversion API
+
+The conversion API consist of 3 routes: 
+
+1. `/convert/` - convert specified image file to specified format.
+  - requires source image and target format on POST request
+  - dosn't require CSRF cookie nor session cookie (public access)
+  - requests content-type: multipart/form-data
+2. `/conversions/` - list all user-filtered conversions
+  - requires session cookie
+3. `/formats/` - list supported conversion format
+
+The conversion API consist of multiple levels:
+
+1. Model (database interface)
+  - saves passed conversion data into the database
+2. Form (model interface)
+  - performs validation and format conversion
+3. View/API (model/form interface)
+  - conversion capabilities for authenticated and unauthenticated users.
+4. UI (API interface)
 
 ### What kind of people will use this service?
 
@@ -104,3 +126,11 @@ Image file format will be processed and stored as lower-cased format names:
 - Then to log-in you can use either email or username + your password
 - All further conversion will be automatically added to the user database
 - Anonymous conversions will be removed both from the browser and server file storage.
+
+
+### Deployment
+
+How the project will be deployed?
+
+- front-end will be hosted on GitHub Pages or Netlify
+- back-end will be hosted on Heroku

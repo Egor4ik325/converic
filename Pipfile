@@ -7,10 +7,12 @@ name = "pypi"
 django = "*"
 python-dotenv = "*"
 django-cors-headers = "*"
+pillow = "*"
 
 [dev-packages]
 pylint = "*"
-autopep8 = "*"
+black = "*"
+ipython = "*"
 
 [requires]
 python_version = "3.9"
