@@ -8,6 +8,8 @@ django = "*"
 python-dotenv = "*"
 django-cors-headers = "*"
 pillow = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 pylint = "*"
