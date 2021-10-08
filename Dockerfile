@@ -21,8 +21,3 @@ COPY . .
 RUN adduser -D heroku
 RUN chown heroku /app
 USER heroku
-
-RUN python manage.py collectstatic --no-input
-RUN python manage.py migrate
-
-CMD gunicorn converic.wsgi:application --bind 0.0.0.0:$PORT

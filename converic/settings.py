@@ -10,11 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from pathlib import Path
 from os import getenv
+from pathlib import Path
 
-from dotenv import load_dotenv
+import dj_database_url
 from django.core.management.utils import get_random_secret_key
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -31,7 +32,7 @@ SECRET_KEY = str(getenv('SECRET_KEY', get_random_secret_key()))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(getenv('DEBUG', '1')) == '1'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] + getenv('ALLOWED_HOSTS', '').split(' ')
 
 
 # Application definition
@@ -95,6 +96,12 @@ DATABASES = {
     }
 }
 
+DATABASE_URL = getenv('DATABASE_URL')
+
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config(
+        default=DATABASE_URL, conn_max_age=50, ssl_require=True
+    )
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
