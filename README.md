@@ -9,7 +9,8 @@ and what features it will have.
 
 - [x] Accounts
 - [x] Conversion storage
-- [ ] Deploy
+- [x] Deploy (backend + frontend)
+- [ ] CI/CD
 - [ ] Advanced UIs
 - [ ] GIF
 - [ ] SVG

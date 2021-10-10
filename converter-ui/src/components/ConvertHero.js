@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import earthImage from "./earth-image.jpg";
 
 export default class ConvertHero extends Component {
@@ -10,7 +10,7 @@ export default class ConvertHero extends Component {
                         <div className="col-10 col-sm-8 col-lg-6">
                             <img
                                 className="d-block img-fluid rounded mx-lg-auto"
-                                src={earthImage} alt="Earch image"
+                                src={earthImage} alt="Earth"
                                 width="700" height="500"
                                 loading="lazy"
                             />

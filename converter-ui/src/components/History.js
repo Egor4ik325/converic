@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 export default class History extends Component {
     renderConversions() {
@@ -10,7 +10,7 @@ export default class History extends Component {
 
         const conversions = history.map(conversion => (
             <div>
-                <img src={conversion.resultImageUrl} width="100" />
+                <img src={conversion.resultImageUrl} width="100" alt="Result" />
                 on {new Date(conversion.date).toString()},
                 size: {conversion.size}
                 <a href={conversion.resultImageUrl}>Download</a>

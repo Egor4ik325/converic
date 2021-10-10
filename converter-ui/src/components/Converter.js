@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { API_URL, MEDIA_URL } from '../constants';
 import { getSupportedFormats } from '../api/Convert';
 
@@ -51,7 +51,7 @@ export default class Convert extends Component {
     renderResultImage = () => {
         if (this.state.resultImageUrl) {
             return (
-                <img src={this.state.resultImageUrl} width="200" />
+                <img src={this.state.resultImageUrl} alt="Converter result" width="200" />
             );
         } else {
             return <p class="text-danger">Image is not converted</p>;
@@ -146,7 +146,7 @@ export default class Convert extends Component {
         if (this.state.image) {
             // Convert binary image data into blob url for <img>
             return (
-                <img src={URL.createObjectURL(this.state.image)} width="200" onLoad={URL.revokeObjectURL(this.src)} />
+                <img src={URL.createObjectURL(this.state.image)} alt="Source" width="200" onLoad={URL.revokeObjectURL(this.src)} />
             );
         } else {
             return <p class="text-danger">Image is not selected</p>;

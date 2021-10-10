@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { AUTH_URL } from '../constants';
 
 export default class Login extends Component {

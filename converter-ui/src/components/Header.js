@@ -3,7 +3,6 @@ import logo from './logo.png';
 
 import { AUTH_URL } from "../constants";
 import { logout } from "./SignUp";
-import App from "../App";
 
 // Navigation header (navbar)
 // Display brand, logo, navigation and profile
@@ -44,19 +43,19 @@ class Header extends Component {
         return (
             <header className="py-3 border-bottom">
                 <div className="container d-md-flex flex-wrap justify-content-left">
-                    <a className="d-flex justify-content-center align-items-center text-decoration-none mb-3 mb-md-1 me-md-4" href="#" data-page="home" onClick={this.handleClick}>
-                        <img className="me-2" src={logo} width="32" height="32" data-page="home" onClick={this.handleClick} />
+                    <a className="d-flex justify-content-center align-items-center text-decoration-none mb-3 mb-md-1 me-md-4" href="#home" data-page="home" onClick={this.handleClick}>
+                        <img className="me-2" src={logo} alt="Logo" width="32" height="32" data-page="home" onClick={this.handleClick} />
                         <span className="text-dark fs-4 fw-bold" data-page="home" onClick={this.handleClick}>Converic</span>
                     </a>
                     <ul className="nav mb-2 mb-md-0 me-md-auto d-flex justify-content-center">
                         <li className="nav-item">
-                            <a class="nav-link link-secondary" href="#" data-page="convert" onClick={this.handleClick}>Convert</a>
+                            <a class="nav-link link-secondary" href="#convert" data-page="convert" onClick={this.handleClick}>Convert</a>
                         </li>
                         <li className="nav-item">
-                            <a class="nav-link link-secondary" href="#">Compress</a>
+                            <a class="nav-link link-secondary" href="#compress">Compress</a>
                         </li>
                         <li className="nav-item">
-                            <a class="nav-link link-secondary" href="#" data-page="history" onClick={this.handleClick}>History <span className="badge rounded-pill bg-primary">{this.props.conversionCount}</span></a>
+                            <a class="nav-link link-secondary" href="#history" data-page="history" onClick={this.handleClick}>History <span className="badge rounded-pill bg-primary">{this.props.conversionCount}</span></a>
                         </li>
                     </ul>
                     {
